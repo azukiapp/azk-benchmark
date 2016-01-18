@@ -2,8 +2,10 @@
 .editorconfig
 .jscsrc
 .jshintrc
+.npmignore
 .travis.yml
 gulpfile.js
 lib/spec
-spec
+spec/
+src/
 .env
