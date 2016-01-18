@@ -9,6 +9,3 @@ gulpfile.js
 lib/spec/
 spec/
 src/
-!lib/src/actions.js
-!lib/src/azk_benchmark.js
-!lib/src/send_data.js
