@@ -1,6 +1,6 @@
 {
   "name": "azk-benchmark",
-  "version": "0.1.11",
+  "version": "0.1.12",
   "description": "azk's benchmarking tool",
   "main": "index.js",
   "bin": {
