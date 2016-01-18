@@ -4,11 +4,11 @@
 .jshintrc
 .npmignore
 .travis.yml
+.env
 gulpfile.js
 lib/spec/
 spec/
 src/
-env
 !lib/src/actions.js
 !lib/src/azk_benchmark.js
 !lib/src/send_data.js
