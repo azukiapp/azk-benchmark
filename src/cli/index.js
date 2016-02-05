@@ -16,7 +16,7 @@ module.exports = class AzkBenchmarkCli {
     if (result.hasOwnProperty('_promise0')) {
       // promise result
       return result
-      .then((promise_result) => process.exit(promise_result))
+      .then((promiseResult) => process.exit(promiseResult))
       .catch((err) => {
         console.error(chalk.bold.red('\n\nError has occurred. Stoping execution.\n'));
         console.error(chalk.red(err.stack));

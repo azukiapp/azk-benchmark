@@ -18,11 +18,11 @@ export default class SendData {
 
     // add host info
     data.device_info = {
-      os           : osName(),
-      proc_arch    : os.arch(),
-      total_memory : Math.floor(os.totalmem() / 1024 / 1024),
-      cpu_info     : os.cpus()[0].model,
-      cpu_count    : os.cpus().length
+      os          : osName(),
+      procArch    : os.arch(),
+      totalMemory : Math.floor(os.totalmem() / 1024 / 1024),
+      cpuInfo     : os.cpus()[0].model,
+      cpuCount    : os.cpus().length
     };
     data.keen = { timestamp: new Date().toISOString() };
 
@@ -31,7 +31,7 @@ export default class SendData {
         if (err) {
           reject(err);
         } else {
-          if (this._opts.verbose_level > 0) {
+          if (this._opts.verboseLevel > 0) {
             console.log(res);
           }
           resolve(res);

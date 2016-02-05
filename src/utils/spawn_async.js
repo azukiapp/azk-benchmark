@@ -3,17 +3,17 @@ import { spawn } from 'child_process';
 import chalk from 'chalk';
 import fsAsync from 'file-async';
 
-let spawnAsync = ({cwd, executable, prefix, params_array, verbose_level}) => {
+let spawnAsync = ({cwd, executable, prefix, paramsArray, verboseLevel}) => {
   return new BB.Promise((resolve, reject) => {
     return fsAsync.exists(cwd).then((exists) => {
       // check if cwd exists
       // only run in destination folder if it exists
-      let spawn_options = { cwd: undefined, env: process.env };
+      let spawnOptions = { cwd: undefined, env: process.env };
       if (exists) {
-        spawn_options.cwd = cwd;
+        spawnOptions.cwd = cwd;
       }
 
-      var spawn_cmd = spawn(executable, params_array, spawn_options)
+      var spawnCmd = spawn(executable, paramsArray, spawnOptions)
       .on('error', (err) => {
         console.error('cwd:', cwd);
         throw err;
@@ -22,58 +22,58 @@ let spawnAsync = ({cwd, executable, prefix, params_array, verbose_level}) => {
       var outputs = [];
 
       // print header
-      var full_command = prefix +
+      var fullCommand = prefix +
         chalk.gray(executable + ' ') +
-        chalk.bold(params_array.join(' ') +
+        chalk.bold(paramsArray.join(' ') +
         '\n');
 
-      let printOutput = (verbose_level, data, color) => {
+      let printOutput = (verboseLevel, data, color) => {
         // exit if verbose is zero
-        if (verbose_level <= 0 || !data) {
+        if (verboseLevel <= 0 || !data) {
           return;
         }
         process.stdout.write(color(data.toString()));
       };
 
       printOutput(
-        verbose_level + 1,
-        full_command,
+        verboseLevel + 1,
+        fullCommand,
         chalk.white
       );
 
-      spawn_cmd.stdout.on('data', (data) => {
+      spawnCmd.stdout.on('data', (data) => {
         outputs.push(data);
 
         // print output
         printOutput(
-          verbose_level,
+          verboseLevel,
           data,
           chalk.gray);
       });
 
-      spawn_cmd.stderr.on('data', (data) => {
+      spawnCmd.stderr.on('data', (data) => {
         outputs.push(data);
 
         // print output
         printOutput(
-          verbose_level,
+          verboseLevel,
           data,
           chalk.gray.bold);
       });
 
-      spawn_cmd.on('close', (code) => {
-        var result_object = {
+      spawnCmd.on('close', (code) => {
+        var resultObject = {
           executable,
-          params_array,
-          cwd: spawn_options.cwd,
+          paramsArray,
+          cwd: spawnOptions.cwd,
           code,
           message: outputs.join('\n')
         };
 
         if (code !== 0) {
-          reject(result_object);
+          reject(resultObject);
         } else {
-          resolve(result_object);
+          resolve(resultObject);
         }
       });
 

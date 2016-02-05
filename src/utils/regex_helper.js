@@ -1,10 +1,10 @@
 var RegexHelper = {
   removeLine(text, from, to) {
-    var first_part = text.substring(0, from);
+    var firstPart = text.substring(0, from);
     if (to !== text.length) {
-      return first_part + text.substring(to + 1, text.length);
+      return firstPart + text.substring(to + 1, text.length);
     } else {
-      return first_part.substring(0, first_part.length - 1);
+      return firstPart.substring(0, firstPart.length - 1);
     }
   },
 
@@ -59,14 +59,14 @@ var RegexHelper = {
    */
   matchAllRegex(str, re) {
     var m;
-    var all_matches = [];
+    var allMatches = [];
     while ((m = re.exec(str)) !== null) {
       if (m.index === re.lastIndex) {
         re.lastIndex++;
       }
-      all_matches.push(m);
+      allMatches.push(m);
     }
-    return all_matches;
+    return allMatches;
   },
 
   trim(str) {

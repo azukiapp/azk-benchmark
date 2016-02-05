@@ -3,21 +3,22 @@ import AzkBenchmark from '../../benchmark/azk_benchmark';
 import chalk from 'chalk';
 import whichHelper from '../../utils/which_helper';
 
-class Version extends CliController {
+class StartController extends CliController {
   index(params) {
-    let azk_bin_path = params.azk_bin_path || 'azk';
+    let azkBinPath = params.azkBinPath || 'azk';
     // get azk absolute path
-    return whichHelper(azk_bin_path)
-    .then((azk_bin_path) => {
+    return whichHelper(azkBinPath)
+    .then((azkBinPath) => {
       // initialize
       let azkBenchmark = new AzkBenchmark({
-        azk_bin_path: azk_bin_path,
-        git_repo: params['git-repo']   || 'azukiapp/azkdemo',
-        dest_path: params['dest-path'] || '/tmp/azkdemo_benchmark',
-        git_ref: params['git-ref']     || 'benchmark',
+        azkBinPath: azkBinPath,
+        gitRepo: params['git-repo']   || 'azukiapp/azkdemo',
+        destPath: params['dest-path'] || '/tmp/azkdemo_benchmark',
+        gitRef: params['git-ref']     || 'benchmark',
+        repeat: params.repeat && Number(params.repeat),
         send: params.send,
         plain: params.plain,
-        verbose_level: params.verbose,
+        verboseLevel: params.verbose,
         projectId: process.env.AZK_BENCHMARK_KEEN_IO_PROJECTID ||
           '5526968d672e6c5a0d0ebec6',
         writeKey : process.env.AZK_BENCHMARK_KEEN_IO_WRITEKEY ||
@@ -34,11 +35,11 @@ class Version extends CliController {
         console.log(chalk.blue(' -----------------------------------'));
         console.log(chalk.cyan('  Starting azk\'s benchmarking tool'));
         console.log(chalk.blue(' -----------------------------------'));
-        console.log(chalk.white.italic('   azk_bin_path:'), chalk.bold(azk_bin_path));
-        console.log(chalk.white.italic('       git-repo:'), chalk.bold(azkBenchmark.opts.git_repo));
-        console.log(chalk.white.italic('      dest-path:'), chalk.bold(azkBenchmark.opts.dest_path));
-        console.log(chalk.white.italic('        git-ref:'), chalk.bold(azkBenchmark.opts.git_ref));
-        console.log(chalk.white.italic('        verbose:'), chalk.bold(azkBenchmark.opts.verbose_level));
+        console.log(chalk.white.italic('   azkBinPath:'), chalk.bold(azkBinPath));
+        console.log(chalk.white.italic('       git-repo:'), chalk.bold(azkBenchmark.opts.gitRepo));
+        console.log(chalk.white.italic('      dest-path:'), chalk.bold(azkBenchmark.opts.destPath));
+        console.log(chalk.white.italic('        git-ref:'), chalk.bold(azkBenchmark.opts.gitRef));
+        console.log(chalk.white.italic('        verbose:'), chalk.bold(azkBenchmark.opts.verboseLevel));
         console.log(chalk.white.italic('           send:'), chalk.bold(azkBenchmark.opts.send));
         if (azkBenchmark.opts.send) {
           console.log(chalk.white.italic('keen project id:'), chalk.bold(azkBenchmark.opts.projectId));
@@ -52,4 +53,4 @@ class Version extends CliController {
   }
 }
 
-module.exports = Version;
+module.exports = StartController;

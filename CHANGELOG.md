@@ -3,6 +3,11 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## dev
+
+* Enhancements
+  - [Cli] Can repeat test several times
+
 ## v0.1.29 (2016-02-05)
 
 * Enhancements
@@ -15,7 +20,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
   - [Cli] 3 levels for `--verbose` option;
   - [Cli] show detailed error if occurs;
   - [Cli] `cli-table` to show final results;
-  - [Core] `azk_bin_path` is passed on instantiation of `AzkBenchmark`;
+  - [Core] `azkBinPath` is passed on instantiation of `AzkBenchmark`;
   - [Config] Rename env variables: `BENCHMARK_AZK_KEEN_IO_PROJECTID` and `BENCHMARK_AZK_KEEN_IO_WRITEKEY` for `AZK_BENCHMARK_KEEN_IO_PROJECTID` and `AZK_BENCHMARK_KEEN_IO_WRITEKEY`;
   - [Cli] Return `1` if an error occurred;
   - [Cli] Adding parameter `--no-color`;
