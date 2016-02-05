@@ -1,7 +1,8 @@
 import BB from 'bluebird';
-import merge from 'lodash.merge';
 import spawnAsync from '../utils/spawn_async';
 import SendData from './send_data';
+import { merge } from 'lodash';
+import _ from 'lodash';
 import { matchFirstRegex } from '../utils/regex_helper';
 import chalk from 'chalk';
 import dotenv from 'dotenv';
@@ -146,6 +147,38 @@ export default class AzkBenchmark {
     });
   }
 
+  _summariseData(finalResultsList) {
+    // map all results to get only `command` and `time` fields
+    const commandsAndValues = finalResultsList.map((finalResults) => {
+      return finalResults.map((item) => {
+        return {
+          command: item.command,
+          time: item.time,
+        };
+      });
+    });
+
+    // Use first list to create `summary` object
+    let summary = commandsAndValues[0]
+    .reduce((x, y) => {
+      return _.merge(x, {[y.command]: 0});
+    }, {});
+
+    // SUM all values into `summary` obj
+    commandsAndValues.forEach((list) => {
+      list.forEach((item) => {
+        summary[item.command] = summary[item.command] + item.time;
+      });
+    });
+
+    // calculate average
+    summary = _.mapValues(summary, function(value) {
+      return Math.floor(value / commandsAndValues.length);
+    });
+
+    return summary;
+  }
+
   _processResults(finalResultsList) {
     let table_args = (this.opts.plain) ? {
       chars: { 'top': '' , 'top-mid': '' , 'top-left': '' , 'top-right': '',
@@ -159,61 +192,54 @@ export default class AzkBenchmark {
 
     var table = new Table(table_args);
 
-    // add each
-    finalResultsList.forEach((finalResults) => {
-      // each result
-      finalResults.forEach((item) => {
-        let row = {};
-        row[item.command] = item.time;
-        table.push(row);
-      });
+    const summary = this._summariseData(finalResultsList);
+    _.forIn(summary, function(value, key) {
+      table.push({[key]: value});
     });
 
-    // compute total
-    finalResultsList.forEach((finalResults) => {
-      // total
-      let total_time = finalResults.reduce((r, c) => {
-        return r + c.time;
-      }, 0);
+    const total_time = _.reduce(summary, (r, c) => {
+      return r + c;
+    }, 0);
+    table.push({total: total_time});
 
-      table.push({total: total_time});
+    console.log(chalk.white.bold('Benchmark Results:'));
+    console.log(table.toString());
 
-      console.log(chalk.white.bold('Benchmark Results:'));
-      console.log(table.toString());
-    });
+    // flatMap and send all items
+    if (this.opts.send) {
+      const flattenFinalData = _.flatten(finalResultsList);
+      return this._sendData(flattenFinalData);
+    }
 
-    // send all
-    finalResultsList.forEach((finalResults) => {
-      if (this.opts.send) {
-        this._sendData(finalResults);
-      } else {
-        console.error(chalk.green('Benchmark finished. No data was sent.'));
-        return 0;
-      }
-    });
+    return BB.resolve(0);
   }
 
   _sendData(finalResults) {
-    if (this.opts.verboseLevel > 0) {
-      console.log('Sending data to Keen.IO...');
-    }
-    return BB.Promise.mapSeries(finalResults, (result) => {
-      // send each result to Keen.IO
-      return this.sendData.send('profiling', result);
-    })
-    .then((results) => {
-      // check if all data was sent to Keen.IO
-      let successResults = results.filter((item) => {
-        return (item.created === true);
-      });
-      if (successResults.length === results.length) {
-        console.log(chalk.green('Benchmark finished. All data sent to Keen.IO.'));
-        return 0;
-      } else {
-        console.log(chalk.red('Benchmark finished. Some data was not sent to Keen.IO:'));
-        console.log(results);
-        return 1;
+    if (this.opts.send) {
+      if (this.opts.verbose_level > 0) {
+        console.error('Sending data to Keen.IO...');
       }
-    });
+      return BB.Promise.mapSeries(finalResults, (result) => {
+        // send each result to Keen.IO
+        return this.sendData.send('profiling', result);
+      })
+      .then((results) => {
+        // check if all data was sent to Keen.IO
+        let success_results = results.filter((item) => {
+          return (item.created === true);
+        });
+        if (success_results.length === results.length) {
+          console.log(chalk.green('Benchmark finished. All data sent to Keen.IO.'));
+          return 0;
+        } else {
+          console.log(chalk.red('Benchmark finished. Some data was not sent to Keen.IO:'));
+          console.log(results);
+          return 1;
+        }
+      });
+    } else {
+      console.error(chalk.green('Benchmark finished. No data was sent.'));
+      return 0;
+    }
   }
 }

@@ -2,7 +2,7 @@ import BB from 'bluebird';
 import Keen from 'keen-js';
 import os from 'os';
 import osName from 'os-name';
-import merge from 'lodash.merge';
+import { merge } from 'lodash';
 
 export default class SendData {
   constructor(opts) {
