@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## v0.1.29 (2016-02-05)
+
+* Enhancements
+  - [Cli] Adding `--plain` option to suppress table from output;
+  - [Cli] Properly printing messages to stdout and stderr;
+
 ## v0.1.28 (2016-01-21)
 
 * Enhancements
