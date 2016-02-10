@@ -62,6 +62,7 @@ export default class AzkBenchmark {
   }
 
   _runPreActions() {
+    console.error(`provisioning`)
     return BB.Promise.mapSeries(this.preActions, (params) => {
       let start = this._startTimer();
       let params_result = params(this.opts);
@@ -139,11 +140,15 @@ export default class AzkBenchmark {
     }
 
     for (let i = 0; i < runTimes; i++) {
-      mainActionsList.push(this._getMainActionsPromise.bind(this));
+      mainActionsList.push({
+        index: i,
+        promiseFunc: this._getMainActionsPromise.bind(this)
+      });
     }
 
     return BB.Promise.mapSeries(mainActionsList, (mainPromise) => {
-      return mainPromise();
+      console.error(`benchmarking ${mainPromise.index + 1}/${runTimes}`)
+      return mainPromise.promiseFunc();
     });
   }
 
@@ -200,7 +205,7 @@ export default class AzkBenchmark {
     const total_time = _.reduce(summary, (r, c) => {
       return r + c;
     }, 0);
-    table.push({total: total_time});
+    table.push({'total (average)': total_time});
 
     console.log(chalk.white.bold('Benchmark Results:'));
     console.log(table.toString());

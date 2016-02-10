@@ -29,7 +29,7 @@ class StartController extends CliController {
       });
 
       if (params.verbose === 0) {
-        console.error('Benchmarking... (this may take a while)');
+        console.error('starting azk benchmark (this may take a while)');
       } else if (params.verbose > 0) {
         // show options
         console.log(chalk.blue(' -----------------------------------'));

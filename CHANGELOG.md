@@ -3,10 +3,13 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## dev
+## v0.2.0 (2016-02-10)
 
 * Enhancements
-  - [Cli] Can repeat test several times
+  - [Cli] `--repeat` can repeat benchmark several times
+  - [Cli] Better output
+  - [Code] Summarise results showing **average** but still sends all data to `Keen.IO`
+  - [Code] Refactor all variables to simple *cammel case*
 
 ## v0.1.29 (2016-02-05)
 
