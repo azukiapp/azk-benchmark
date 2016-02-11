@@ -6,12 +6,12 @@
   - You should tell where does azk binary is.
 
 Usage:
-  azk-benchmark [<azkBinPath>] [--git-repo=<git-repo> --dest-path=<dest-path> --git-ref=<git-ref> --repeat=<repeat> --send] [--no-color] [--plain] [-v]...
+  azk-benchmark [<azk-bin-path>] [--git-repo=<git-repo> --dest-path=<dest-path> --git-ref=<git-ref> --repeat=<repeat> --send] [--no-color] [--plain] [-v]...
   azk-benchmark -h | --help
   azk-benchmark --version
 
 Arguments:
-  azkBinPath                    Full path of azk binary/link [default: azk].
+  <azk-bin-path>                  Full path of azk binary/link [default: azk].
 
 Options:
   --repeat=<repeat>, -n=<repeat>  Repeat benchmark several times

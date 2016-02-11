@@ -62,7 +62,7 @@ export default class AzkBenchmark {
   }
 
   _runPreActions() {
-    console.error(`provisioning`)
+    console.error(`provisioning`);
     return BB.Promise.mapSeries(this.preActions, (params) => {
       let start = this._startTimer();
       let params_result = params(this.opts);
@@ -147,7 +147,7 @@ export default class AzkBenchmark {
     }
 
     return BB.Promise.mapSeries(mainActionsList, (mainPromise) => {
-      console.error(`benchmarking ${mainPromise.index + 1}/${runTimes}`)
+      console.error(`benchmarking ${mainPromise.index + 1}/${runTimes}`);
       return mainPromise.promiseFunc();
     });
   }

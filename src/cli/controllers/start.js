@@ -5,13 +5,13 @@ import whichHelper from '../../utils/which_helper';
 
 class StartController extends CliController {
   index(params) {
-    let azkBinPath = params.azkBinPath || 'azk';
+    let azkBinPath = params['azk-bin-path'] || 'azk';
     // get azk absolute path
     return whichHelper(azkBinPath)
-    .then((azkBinPath) => {
+    .then((azkBinFullPath) => {
       // initialize
       let azkBenchmark = new AzkBenchmark({
-        azkBinPath: azkBinPath,
+        azkBinPath: azkBinFullPath,
         gitRepo: params['git-repo']   || 'azukiapp/azkdemo',
         destPath: params['dest-path'] || '/tmp/azkdemo_benchmark',
         gitRef: params['git-ref']     || 'benchmark',
@@ -35,7 +35,7 @@ class StartController extends CliController {
         console.log(chalk.blue(' -----------------------------------'));
         console.log(chalk.cyan('  Starting azk\'s benchmarking tool'));
         console.log(chalk.blue(' -----------------------------------'));
-        console.log(chalk.white.italic('   azkBinPath:'), chalk.bold(azkBinPath));
+        console.log(chalk.white.italic('   azk-bin-path:'), chalk.bold(azkBinPath));
         console.log(chalk.white.italic('       git-repo:'), chalk.bold(azkBenchmark.opts.gitRepo));
         console.log(chalk.white.italic('      dest-path:'), chalk.bold(azkBenchmark.opts.destPath));
         console.log(chalk.white.italic('        git-ref:'), chalk.bold(azkBenchmark.opts.gitRef));
