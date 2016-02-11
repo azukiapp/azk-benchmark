@@ -100,16 +100,18 @@ export default class AzkBenchmark {
     return spawnAsync({
       cwd          : this.opts.destPath,
       executable   : this.opts.azkBinPath,
-      paramsArray : params,
+      paramsArray  : params,
       prefix       : prefix,
-      verboseLevel: verboseLevel - 1,
+      verboseLevel : verboseLevel - 1,
     });
   }
 
   _getAzkVersion() {
     return this._spawnCommand(['version'], this.getVersionPrefix, this.opts.verboseLevel - 1)
     .then((versionResult) => {
-      this.azk_version = matchFirstRegex(versionResult.message, /(\d+\.\d+\.\d+)/)[1];
+      this.azk_version = matchFirstRegex(versionResult.message, /azk version (\d+\.\d+\.\d+)/)[1];
+      this.azk_commit_id = matchFirstRegex(versionResult.message, /build (\w+)/)[1];
+      this.azk_commit_date = matchFirstRegex(versionResult.message, /date (\d+-\d+-\d+)/)[1];
     });
   }
 
@@ -122,6 +124,8 @@ export default class AzkBenchmark {
           command: 'azk ' + params.join(' '),
           result: result,
           azk_version: this.azk_version,
+          azk_commit_id: this.azk_commit_id,
+          azk_commit_date: this.azk_commit_date,
           time: this._stopTimer(start)
         };
         if (this.opts.verboseLevel > 0) {

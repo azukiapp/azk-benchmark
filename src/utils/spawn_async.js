@@ -64,7 +64,6 @@ let spawnAsync = ({cwd, executable, prefix, paramsArray, verboseLevel}) => {
       spawnCmd.on('close', (code) => {
         var resultObject = {
           executable,
-          paramsArray,
           cwd: spawnOptions.cwd,
           code,
           message: outputs.join('\n')
